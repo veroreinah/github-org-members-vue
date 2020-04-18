@@ -25,7 +25,7 @@
 <script>
 import CustomLoader from "@/components/CustomLoader";
 import MemberCard from "@/components/MemberCard";
-import { API_URL } from "@/constants";
+import { getMembers } from "@/backendAPI";
 
 export default {
   name: "Home",
@@ -41,8 +41,7 @@ export default {
     }
   },
   created() {
-    fetch(`${API_URL}orgs/vuejs/public_members`)
-      .then(response => response.json())
+    getMembers()
       .then(members => (this.members = members))
       .catch(error => console.error(error.message));
   },

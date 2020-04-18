@@ -20,7 +20,11 @@
 
       <template v-else>
         <div class="md-layout-item md-size-30 md-xsmall-size-100">
-          <MemberCard :member="member" :detail-url="false" />
+          <MemberCard :member="member">
+            <md-button class="md-raised md-accent" :href="member.html_url" target="_blank">
+              View GitHub
+            </md-button>
+          </MemberCard>
         </div>
         <div class="md-layout-item md-size-70 md-xsmall-size-100">
           <h1>{{ member.name }}</h1>
@@ -61,27 +65,24 @@
 <script>
 import CustomLoader from "@/components/CustomLoader";
 import MemberCard from "@/components/MemberCard";
-import { API_URL } from "@/constants";
+import { getMember } from "@/backendAPI";
 
 export default {
+  props: ["memberId"],
   data: () => ({
     member: null,
     notFound: false
   }),
   created() {
-    const member = this.$route.params.member;
-
-    fetch(`${API_URL}users/${member}`)
-      .then(response => {
-        if (response.status === 404) {
-          this.notFound = true;
-          return null;
-        } else {
-          return response.json();
-        }
-      })
+    getMember(this.memberId)
       .then(member => (this.member = member))
-      .catch(error => console.error(error));
+      .catch(error => {
+        if (error === 404) {
+          this.notFound = true;
+        } else {
+          console.error(error);
+        }
+      });
   },
   components: {
     CustomLoader,

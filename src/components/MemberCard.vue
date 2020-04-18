@@ -10,13 +10,12 @@
       </md-card-media>
     </md-card-header>
 
-    <md-card-actions>
-      <md-button v-if="detailUrl" class="md-raised md-accent" :to="memberLink">
-        View more
-      </md-button>
-      <md-button v-else class="md-raised md-accent" :href="member.html_url" target="_blank">
-        View more
-      </md-button>
+    <md-card-actions @click.stop>
+      <slot>
+        <md-button class="md-raised md-accent" @click.stop>
+          View more
+        </md-button>
+      </slot>
     </md-card-actions>
   </md-card>
 </template>
@@ -25,10 +24,6 @@
 export default {
   props: {
     member: Object,
-    detailUrl: {
-      type: Boolean,
-      default: true,
-    }
   },
   computed: {
     memberLink() {
